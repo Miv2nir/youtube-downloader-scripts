@@ -19,7 +19,7 @@ download_sponsor_free_video=True
 cut_selfpromo_from_sponsor_free_video=True
 handle_crashes=True
 log_url=False
-rate_limiter=True
+rate_limiter=False
 
 if os.name=='nt': #home machine, windows
     dump_path="A:/Unsorted/"
@@ -103,13 +103,13 @@ print(already_downloaded_urls)
 print('Scanning the Sorted folder...',end='')
 no_directory=False
 try:
-    dirs=os.listdir(dump_path_2+channel_info_json['channel']+'/')
+    dirs_new=os.listdir(dump_path_2+channel_info_json['channel']+'/')
     print('OK')
 except:
     print('Target directory not found, continuing on')
     no_directory=True
 if not no_directory:
-    for i in dirs:
+    for i in dirs_new:
         dirs_2=os.listdir(dump_path_2+channel_info_json['channel']+'/'+i+'/')
         for j in dirs_2:
             with open(dump_path_2+channel_info_json['channel']+'/'+i+'/'+j+'/info.toml','r',encoding="utf-8") as f:
@@ -451,6 +451,7 @@ for url in urls: #download_video.py
         with yt_dlp.YoutubeDL(opts) as ydl:
             if rate_limiter:
                 random_wait(29)
+            cwd=os.getcwd()
             ydl.download(url)
         print('Download done.')
         #verify and remove excess thumbnail files
