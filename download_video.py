@@ -398,7 +398,8 @@ try:
         last_end=0
         for i in info_json['sponsorblock_chapters']:
             if i['category'] in categories:
-                if i['start_time']!=0 and not(last_end>=i['start_time']):
+                #if i['start_time']!=0 and not(last_end>=i['start_time']): #case: https://www.youtube.com/watch?v=RWE60dU6Vto, if the chapter is at the very beginning of the video it gets skipped
+                if (last_end<=i['start_time']):
                     durations.append((last_end,i['start_time']))
                 last_end=max(last_end,i['end_time'])
         if not durations: #empty case
@@ -407,6 +408,8 @@ try:
             with open(filename,'w',encoding="utf-8") as f:
                 f.write('#EXTM3U\n')
                 for i in durations:
+                    if i[0]==i[1]:
+                        continue #case: https://www.youtube.com/watch?v=RWE60dU6Vto, creates a playlist entry that starts and ends at zero
                     f.write('#EXTINF:3310,'+video_name+'\n')
                     f.write('#EXTVLCOPT:start-time='+str(i[0])+'\n')
                     f.write('#EXTVLCOPT:stop-time='+str(i[1])+'\n')
