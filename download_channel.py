@@ -19,7 +19,7 @@ download_sponsor_free_video=True
 cut_selfpromo_from_sponsor_free_video=True
 handle_crashes=True
 log_url=False
-rate_limiter=True
+rate_limiter=False
 
 if os.name=='nt': #home machine, windows
     dump_path="A:/Unsorted/"

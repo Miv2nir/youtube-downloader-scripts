@@ -1,0 +1,10 @@
+#example config file
+download-shorts = true
+download-vods = true
+
+[extended-ruleset]
+whitelist-mode = true
+videos = ["url","url","url"] #in whitelist mode only those videos will be downloaded, otherwise those will be excluded
+since = "yyyy.mm.dd"
+until = "yyyy.mm.dd"
+title-has = "text" #matches the title string
