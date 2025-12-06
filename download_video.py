@@ -36,6 +36,8 @@ else:
  
 def is_short(url):
     return ('short' in url)
+def is_live(info_json):
+    return info_json['media_type']=='livestream'
 
 print("Currently processing "+url+'... ')
 try:
@@ -240,6 +242,8 @@ try:
     print('Creating a new directory...',end=' ')
     if is_short(url):
         dir_name=date+' SHORT '+title
+    if is_live(info_json):
+        dir_name=date+' VOD '+title
     else:
         dir_name=date+' '+title
     for i in dir_name:
