@@ -53,6 +53,7 @@ try:
     'final_ext': 'mp4',
     'format_sort': ['res:1440', 'ext:mp4:m4a'],
     'fragment_retries': inf,
+    'remote_components': ['ejs:github'],
     'postprocessors': [{'format': 'jpg',
                         'key': 'FFmpegThumbnailsConvertor',
                         'when': 'before_dl'},

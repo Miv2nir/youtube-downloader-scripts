@@ -156,6 +156,7 @@ for url in urls: #download_video.py
         'format_sort': ['res:1440', 'ext:mp4:m4a'],
         'fragment_retries': inf,
         #'ignoreerrors': 'only_download',
+        'remote_components': ['ejs:github'],
         'postprocessors': [{'format': 'jpg',
                             'key': 'FFmpegThumbnailsConvertor',
                             'when': 'before_dl'},
