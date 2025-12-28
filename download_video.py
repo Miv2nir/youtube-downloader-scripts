@@ -34,8 +34,9 @@ else:
 
 #main downloader function body
  
-def is_short(url):
-    return ('short' in url)
+def is_short(info_json):
+    #return ('short' in url)
+    return info_json['media_type']=='short'
 def is_live(info_json):
     return info_json['media_type']=='livestream'
 
@@ -241,9 +242,9 @@ try:
     print('OK')
     #compose a directory
     print('Creating a new directory...',end=' ')
-    if is_short(url):
+    if is_short(info_json):
         dir_name=date+' SHORT '+title
-    if is_live(info_json):
+    elif is_live(info_json):
         dir_name=date+' VOD '+title
     else:
         dir_name=date+' '+title
