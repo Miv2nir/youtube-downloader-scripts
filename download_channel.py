@@ -110,12 +110,28 @@ except:
     no_directory=True
 if not no_directory:
     for i in dirs_new:
-        dirs_2=os.listdir(dump_path_2+channel_info_json['channel']+'/'+i+'/')
+        #skip filters.toml
+        try:
+            dirs_2=os.listdir(dump_path_2+channel_info_json['channel']+'/'+i+'/')
+        except NotADirectoryError:
+            continue
         for j in dirs_2:
             with open(dump_path_2+channel_info_json['channel']+'/'+i+'/'+j+'/info.toml','r',encoding="utf-8") as f:
                 d=toml.loads(f.read())
                 already_downloaded_urls.append(d['video_link'])
 print(already_downloaded_urls)
+
+print("Reading filters.toml...",end='')
+download_vods=True
+download_shorts=True
+try:
+    with open(dump_path_2+channel_info_json['channel']+'/filters.toml','r',encoding="utf-8") as f:
+        d=toml.loads(f.read())
+        download_vods=d['download-vods']
+        download_shorts=d['download-shorts']
+except:
+    pass
+print('OK')
     
 
 
@@ -143,6 +159,7 @@ for url in urls: #download_video.py
         return info_json['media_type']=='livestream'
 
     print("Currently processing "+url+'... ')
+
     try:
         final_filename = None
 
@@ -236,6 +253,14 @@ for url in urls: #download_video.py
         print('Retrieving sponsor info...')
         info_json=yt_dlp.YoutubeDL(opts_metadata).extract_info(url)
         print('info_json obtained.')
+        print("Following the filters rule...",end=' ')
+        if is_live(info_json) and not download_vods:
+            print('Video is filtered out, skipping.')
+            continue
+        if is_short(info_json) and not download_shorts:
+            print('Video is filtered out, skipping.')
+            continue
+        
         if rate_limiter:
             random_wait(27)
             
