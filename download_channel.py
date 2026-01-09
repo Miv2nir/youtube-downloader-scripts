@@ -18,7 +18,7 @@ force_keyframes=False
 download_sponsor_free_video=True
 cut_selfpromo_from_sponsor_free_video=True
 handle_crashes=True
-log_url=False
+log_url=True
 rate_limiter=False
 
 if os.name=='nt': #home machine, windows
@@ -592,7 +592,10 @@ for url in urls: #download_video.py
         #if flagged, move a resulting directory to a network share
         if move_to_share:
             print('Sending files to a home server...',end=' ')
-            shared_folder_path=dump_path+channel_info_json['channel']+'/'+dir_name
+            final_channel_name=channel_info_json['channel']
+            while final_channel_name[-1]==' ':
+                final_channel_name=final_channel_name[:-1]
+            shared_folder_path=dump_path+final_channel_name+'/'+dir_name
             os.chdir(os.pardir)
             #import shutil
             while True:
