@@ -10,6 +10,7 @@ from datetime import datetime
 from pytz import timezone
 from math import inf
 import random
+from pathlib import Path
 
 
 #params
@@ -19,7 +20,7 @@ download_sponsor_free_video=True
 cut_selfpromo_from_sponsor_free_video=True
 handle_crashes=True
 log_url=True
-rate_limiter=True
+rate_limiter=False
 
 if os.name=='nt': #home machine, windows
     dump_path="A:/Unsorted/"
@@ -116,25 +117,52 @@ if not no_directory:
         except NotADirectoryError:
             continue
         for j in dirs_2:
-            with open(dump_path_2+channel_info_json['channel']+'/'+i+'/'+j+'/info.toml','r',encoding="utf-8") as f:
-                d=toml.loads(f.read())
-                already_downloaded_urls.append(d['video_link'])
+            try:
+                with open(dump_path_2+channel_info_json['channel']+'/'+i+'/'+j+'/info.toml','r',encoding="utf-8") as f:
+                    d=toml.loads(f.read())
+                    already_downloaded_urls.append(d['video_link'])
+            except FileNotFoundError:
+                print('info.toml not found in',j+', continuing...')
 print(already_downloaded_urls)
 
 print("Reading filters.toml...",end='')
 download_vods=True
 download_shorts=True
+whitelist_mode=False
 try:
     with open(dump_path_2+channel_info_json['channel']+'/filters.toml','r',encoding="utf-8") as f:
         d=toml.loads(f.read())
         download_vods=d['download-vods']
         download_shorts=d['download-shorts']
+        whitelist_mode=d['whitelist-mode']
 except:
     pass
 print('OK')
+
+def extract_video_id(url):
+    url=url.replace('\n','')
+    video_id=url.split('/')[-1]
+    if video_id=='':
+        video_id=url.split('/')[-2]
+    video_id=video_id.replace('watch?v=','')
+    return video_id
     
 
-
+#load the list
+url_ids=set()
+if whitelist_mode:
+    raise NotImplementedError
+else:
+    try:
+        with open(dump_path_2+channel_info_json['channel']+'/blacklist.txt','r',encoding="utf-8") as f:
+            i=f.readline()
+            while i:
+                #extract the video ids
+                url_ids.add(extract_video_id(i))
+                i=f.readline()
+    except FileNotFoundError:
+        pass
+print(url_ids)
 print("Iterating through the code from download_video.py")
 
 
@@ -148,6 +176,13 @@ for url in urls: #download_video.py
     if url in already_downloaded_urls:
         print(url,'has already been downloaded, skipping...')
         continue
+    #extract video id here too
+    video_id=extract_video_id(url)
+    if video_id in url_ids:
+        print(url,'has been filtered out by the blacklist, skipping...')
+        continue
+
+    
     
     is_patreon_exclusive=False
     patreon_post_link=""
