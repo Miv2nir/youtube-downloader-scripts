@@ -151,9 +151,16 @@ def extract_video_id(url):
 #load the list
 url_ids=set()
 if whitelist_mode:
-    raise NotImplementedError
+    #in this mode iteration should be done over the urls in whitelist.txt and not the actual channel
+    print('Whitelist mode is on, overriding the download list')
+    urls=[]
+    with open(dump_path_2+channel_info_json['channel']+'/whitelist.txt','r',encoding="utf-8") as f:
+        i=f.readline()
+        while i:
+            urls.append(i.replace('\n',''))
+            i=f.readline()
 else:
-    try:
+    try: #this is the default outcome thus the handling of an exception is required
         with open(dump_path_2+channel_info_json['channel']+'/blacklist.txt','r',encoding="utf-8") as f:
             i=f.readline()
             while i:
