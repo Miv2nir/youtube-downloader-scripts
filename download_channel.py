@@ -165,9 +165,8 @@ else:
             i=f.readline()
             while i:
                 #extract the video ids
-                if i:
-                    if i[0]!='#':
-                        url_ids.add(extract_video_id(i))
+                if i!='\n' and i[0]!='#':
+                    url_ids.add(extract_video_id(i))
                 url_ids.add(extract_video_id(i))
                 i=f.readline()
     except FileNotFoundError:
