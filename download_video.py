@@ -7,7 +7,7 @@ import time
 from math import inf
 
 #params
-move_to_share=False
+move_to_share=True
 force_keyframes=False
 download_sponsor_free_video=True
 cut_selfpromo_from_sponsor_free_video=True
@@ -15,12 +15,12 @@ handle_crashes=True
 rate_limiter=False
 
 if os.name=='nt': #home machine, windows
-    dump_path="A:/Unsorted/"
+    dump_path="A:/Unsorted/Misc/"
 else: #unix
     if 'com.termux' in os.getcwd(): #running from termux
         dump_path='/data/data/com.termux/files/home/archive_mount/archive/Unsorted/'
     else: #assuming regular linux
-        dump_path='/home/miv2nir/archive_mount/archive/Unsorted/'
+        dump_path='/home/miv2nir/archive_mount/archive/Unsorted/Misc/'
 
 #code
 url = input("Enter video URL: ")
