@@ -103,7 +103,9 @@ try: #this is the default outcome thus the handling of an exception is required
         i=f.readline()
         while i:
             #extract the video ids
-            url_ids.add(extract_video_id(i))
+            if i:
+                if i[0]!='#':
+                    url_ids.add(extract_video_id(i))
             i=f.readline()
 except FileNotFoundError:
     pass
