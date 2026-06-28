@@ -97,7 +97,8 @@ if not no_directory:
                 already_downloaded_urls.append(d['video_link'])
         except FileNotFoundError:
             print('info.toml not found in',i+', continuing...')
-
+        except NotADirectoryError:
+            pass
 try: #this is the default outcome thus the handling of an exception is required
     with open(dump_path+'/blacklist.txt','r',encoding="utf-8") as f:
         i=f.readline()
